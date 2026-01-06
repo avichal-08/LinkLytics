@@ -1,6 +1,6 @@
 "use client"
 
-import { signIn, useSession } from "next-auth/react";
+import { signIn, useSession, signOut } from "next-auth/react";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -14,6 +14,7 @@ export default function Home() {
       <div onClick={()=>signIn("github",{ callbackUrl: "/" })}>
         Login github
       </div>
+      <div onClick={()=>signOut()}>Logout</div>
     </div>
   );
 }
