@@ -13,6 +13,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
     "@repo/db": "workspace:*",
+    "@repo/queue": "workspace:*",
     "@upstash/redis": "^1.36.1",
     "nanoid": "^5.1.6",
     "next": "16.1.0",

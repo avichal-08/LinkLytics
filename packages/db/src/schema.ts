@@ -82,10 +82,8 @@ export const linkAnalytics = pgTable(
     os: varchar("os", { length: 64 }),
     browser: varchar("browser", { length: 64 }),
     countryCode: varchar("countryCode", { length: 8 }),
-    referrer: text("referrer"),
-    utmSource: varchar("utmSource", { length: 128 }),
-    utmMedium: varchar("utmMedium", { length: 128 }),
-    utmCampaign: varchar("utmCampaign", { length: 128 }),
+    city: text("city"),
+    referrer: text("referrer")
   },
   (table) => ({
     linkTimeIdx: index("analytic_link_time_idx").on(
