@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth"
-import CreateLink from "../../components/createLink"
+import CreateLink from "../../components/CreateLink"
 import { authOptions } from "../../lib/configs/authOptions"
 import { redirect } from "next/navigation"
 

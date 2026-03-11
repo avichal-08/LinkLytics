@@ -1,7 +1,7 @@
 import type { CreateLinkResponse } from "../../lib/types/createLinkResponse"
 import { isValidUrl } from "../utils/isValidUrl";
 
-export default async function createLink(url: string): Promise<CreateLinkResponse> {
+export async function createLink(url: string): Promise<CreateLinkResponse> {
     const isUrlValid = isValidUrl(url);
     if (!isUrlValid) {
         return {
