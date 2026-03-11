@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/db";
 import { links, linkAnalytics } from "@repo/db";
 import { eq, and, desc } from "drizzle-orm";
-import getCount from "../../../../lib/utils/getCount";
+import { getCount } from "../../../../lib/utils/getCount";
 import { RawAnalyticsData } from "../../../../lib/types/rawAnalyticsData";
 
 export async function GET(req: NextRequest, { params }: { params: { linkId: string } }) {
