@@ -15,5 +15,8 @@
   },
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "next-auth": "^4.24.13"
   }
 }
