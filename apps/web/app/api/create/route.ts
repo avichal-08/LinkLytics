@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../lib/configs/authOptions";
-import createLink from "../../../lib/server/createLink";
+import { authOptions } from "@/lib/configs/authOptions";
+import createLink from "@/lib/server/createLink";
 
 export async function POST(req: NextRequest) {
     try {

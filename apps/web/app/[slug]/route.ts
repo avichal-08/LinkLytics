@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { redis } from "../../lib/configs/redis";
-import clickToQueue from "../../lib/server/clickToQueue";
+import { redis } from "@/lib/configs/redis";
+import clickToQueue from "@/lib/server/clickToQueue";
 import { db, links } from "@repo/db";
 import { eq } from "drizzle-orm";
 
 export async function GET(
     req: NextRequest,
-    { params }: { params: { slug: string } }
+    { params }: { params: Promise<{ slug: string }> }
 ) {
     const { slug } = await params;
 

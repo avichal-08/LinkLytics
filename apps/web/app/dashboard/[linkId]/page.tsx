@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../lib/configs/authOptions";
+import { authOptions } from "@/lib/configs/authOptions";
 import { db, links, linkAnalytics } from "@repo/db";
 import { eq, and, desc } from "drizzle-orm";
-import { getCount } from "../../../lib/utils/getCount";
+import { getCount } from "@/lib/utils/getCount";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, MousePointerClick, Users, ExternalLink } from "lucide-react";
