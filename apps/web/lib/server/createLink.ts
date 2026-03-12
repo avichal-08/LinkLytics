@@ -21,7 +21,7 @@ export default async function createLink(url: string, userId: string) {
 
         await redis.set(`slug:${redirectSlug}`, url);
 
-        return `http://localhost:3000/${redirectSlug}`;
+        return `https://linklytics-two.vercel.app/${redirectSlug}`;
     } catch (error) {
         return false;
     }
