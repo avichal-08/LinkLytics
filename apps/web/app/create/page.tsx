@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth"
-import CreateLink from "../../components/CreateLink"
-import { authOptions } from "../../lib/configs/authOptions"
+import CreateLink from "@/components/CreateLink"; 
+import { authOptions } from "@/lib/configs/authOptions";
 import { redirect } from "next/navigation"
 
 export default async function Create() {

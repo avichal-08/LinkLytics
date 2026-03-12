@@ -2,7 +2,7 @@ import { db, links } from "@repo/db";
 import { eq, desc } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "../../lib/configs/authOptions";
+import { authOptions } from "@/lib/configs/authOptions";
 
 import { Header } from "@/components/Header";
 import { CreateLinkButton } from "@/components/CreateLinkButton";

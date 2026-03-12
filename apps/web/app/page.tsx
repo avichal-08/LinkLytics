@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { BarChart3, Globe, Link as LinkIcon, Zap, Github } from "lucide-react";
 
 import { AuthButtons } from "@/components/AuthButtons";
-import { authOptions } from "../lib/configs/authOptions";
+import { authOptions } from "@/lib/configs/authOptions";
 import { Button } from "@/components/ui/button";
 
 export default async function Home() {
