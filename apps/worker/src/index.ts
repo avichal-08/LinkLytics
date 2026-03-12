@@ -39,3 +39,10 @@ const gracefulShutdown = async () => {
 
 process.on("SIGINT", gracefulShutdown);
 process.on("SIGTERM", gracefulShutdown);
+
+Bun.serve({
+  port: process.env.PORT || 10000,
+  fetch() {
+    return new Response("Linklytics Worker is alive and processing queue!");
+  },
+});
