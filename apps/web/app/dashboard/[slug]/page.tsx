@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ClicksTimeChart } from "@/components/ClicksTimeChart";
 import { Button } from "@/components/ui/button";
 import { ChartCard } from "@/components/ChartCard";
+import { CopyButton } from "@/components/CopyButton";
 
 export default async function LinkAnalyticsPage({ params }: { params: { slug: string } }) {
     const { slug } = await params;
@@ -87,21 +88,20 @@ export default async function LinkAnalyticsPage({ params }: { params: { slug: st
                     </Link>
                 </Button>
 
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-display font-bold text-primary mb-2">
-                            https://linklytics-two.vercel.app/{linkData.slug}
-                        </h1>
-                        <a
-                            href={linkData.destinationUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-muted-foreground hover:text-blue-500 flex items-center gap-1 text-sm transition-colors"
-                        >
-                            {linkData.destinationUrl} <ExternalLink className="h-3 w-3" />
-                        </a>
-                    </div>
+                <div className="flex items-center gap-2">
+                    <h1 className="text-2xl font-display font-bold text-primary mb-2">
+                        https://linklytics-two.vercel.app/{linkData.slug}
+                    </h1>
+                    <CopyButton text={`https://linklytics-two.vercel.app/${linkData.slug}`} />
                 </div>
+                <a
+                    href={linkData.destinationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-blue-500 flex items-center gap-1 text-sm transition-colors"
+                >
+                    {linkData.destinationUrl} <ExternalLink className="h-3 w-3" />
+                </a>
             </div>
 
             <ClicksTimeChart data={timeSeriesData} />
