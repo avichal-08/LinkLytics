@@ -12,8 +12,8 @@ import { ClicksTimeChart } from "@/components/ClicksTimeChart";
 import { Button } from "@/components/ui/button";
 import { ChartCard } from "@/components/ChartCard";
 
-export default async function LinkAnalyticsPage({ params }: { params: { linkId: string } }) {
-    const { linkId } = await params;
+export default async function LinkAnalyticsPage({ params }: { params: { slug: string } }) {
+    const { slug } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session || !session.user?.id) {
@@ -22,10 +22,11 @@ export default async function LinkAnalyticsPage({ params }: { params: { linkId: 
 
     const linkData = await db.query.links.findFirst({
         where: and(
-            eq(links.id, linkId),
+            eq(links.slug, slug),
             eq(links.userId, session.user.id)
         ),
         columns: {
+            id: true,
             slug: true,
             destinationUrl: true,
             createdAt: true
@@ -39,7 +40,7 @@ export default async function LinkAnalyticsPage({ params }: { params: { linkId: 
     const analyticsData = await db
         .select()
         .from(linkAnalytics)
-        .where(eq(linkAnalytics.linkId, linkId))
+        .where(eq(linkAnalytics.linkId, linkData.id))
         .orderBy(desc(linkAnalytics.timestamp));
 
     const totalClicks = analyticsData.length;
@@ -88,8 +89,8 @@ export default async function LinkAnalyticsPage({ params }: { params: { linkId: 
 
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-display font-bold text-primary mb-2">
-                            /{linkData.slug}
+                        <h1 className="text-2xl font-display font-bold text-primary mb-2">
+                            https://linklytics-two.vercel.app/{linkData.slug}
                         </h1>
                         <a
                             href={linkData.destinationUrl}

@@ -37,7 +37,7 @@ export function LinkCard({ link }: { link: LinkItem }) {
 
     return (
         <Link
-            href={`/dashboard/${link.id}`}
+            href={`/dashboard/${link.slug}`}
             className={`block p-5 border border-border rounded-xl hover:border-primary transition-colors bg-card text-card-foreground shadow-sm relative group ${isDeleting ? "opacity-50 pointer-events-none" : ""}`}
         >
             <div className="flex justify-between items-start mb-1">
