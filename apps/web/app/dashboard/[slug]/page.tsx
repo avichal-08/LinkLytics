@@ -12,6 +12,7 @@ import { ClicksTimeChart } from "@/components/ClicksTimeChart";
 import { Button } from "@/components/ui/button";
 import { ChartCard } from "@/components/ChartCard";
 import { CopyButton } from "@/components/CopyButton";
+import { LinkDeleteButton } from "@/components/LinkDeleteButton";
 
 export default async function LinkAnalyticsPage({ params }: { params: { slug: string } }) {
     const { slug } = await params;
@@ -78,6 +79,11 @@ export default async function LinkAnalyticsPage({ params }: { params: { slug: st
 
     const timeSeriesData = processTimeSeries(analyticsData);
 
+    const link = {
+        id: linkData.id,
+        slug: linkData.slug
+    }
+
     return (
         <div className="max-w-5xl mx-auto p-8 flex flex-col min-h-screen space-y-8">
 
@@ -88,11 +94,14 @@ export default async function LinkAnalyticsPage({ params }: { params: { slug: st
                     </Link>
                 </Button>
 
-                <div className="flex items-center gap-2">
-                    <h1 className="text-2xl font-display font-bold text-primary mb-2">
-                        https://linklytics-two.vercel.app/{linkData.slug}
-                    </h1>
-                    <CopyButton text={`https://linklytics-two.vercel.app/${linkData.slug}`} />
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <h1 className="text-2xl font-display font-bold text-primary mb-2">
+                            https://linklytics-two.vercel.app/{linkData.slug}
+                        </h1>
+                        <CopyButton text={`https://linklytics-two.vercel.app/${linkData.slug}`} />
+                    </div>
+                    <LinkDeleteButton link={link} />
                 </div>
                 <a
                     href={linkData.destinationUrl}
