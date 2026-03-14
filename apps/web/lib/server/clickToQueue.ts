@@ -4,6 +4,9 @@ import { clickQueue } from "@repo/queue";
 export default async function clickToQueue(req: NextRequest, slug: string) {
   try {
 
+    const rawCity = req.headers.get("x-vercel-ip-city");
+    const decodedCity = rawCity ? decodeURIComponent(rawCity) : null;
+
     const analyticsPayload = {
       slug,
       timestamp: new Date().toISOString(),
@@ -11,7 +14,7 @@ export default async function clickToQueue(req: NextRequest, slug: string) {
       userAgent: req.headers.get("user-agent") || "",
       referrer: req.headers.get("referer") || null,
       country: req.headers.get("x-vercel-ip-country") || null,
-      city: req.headers.get("x-vercel-ip-city") || null,
+      city: decodedCity
     };
 
     await clickQueue.add("process-click", analyticsPayload, {
