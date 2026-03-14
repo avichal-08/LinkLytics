@@ -39,21 +39,30 @@ bun install
 ```
 
 ### 2. Install dependencies
+```bash
+bun install
+```
 
 ### 3. Set up environment variables
 # Database
+```text
 DATABASE_URL="postgresql://user:password@host:port/db?sslmode=require"
+```
 
 # Redis (Upstash)
+```text
 REDIS_REST_URL="[https://your-upstash-url.upstash.io](https://your-upstash-url.upstash.io)"
 REDIS_REST_TOKEN="your_upstash_token"
 REDIS_TCP_URL="rediss://default:password@host:port"
+```
 
 # NextAuth
+```text
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="your_secret_string"
 GOOGLE_CLIENT_ID="your_google_id"
 GOOGLE_CLIENT_SECRET="your_google_secret"
+```
 
 ### 4. Run database migrations
 ```bash
@@ -69,7 +78,7 @@ bun dev
 ```
 
 ## Project Structure
-
+```text
 ├── apps
 │   ├── web        # Main Next.js application (UI, Auth, Analytics Dashboard)
 │   └── worker     # Bun background worker for processing click analytics
@@ -77,3 +86,4 @@ bun dev
 │   ├── db         # Database configuration, Drizzle schema, and queries
 │   └── queue      # Shared BullMQ setup and types
 └── turbo.json     # Monorepo build pipeline
+```
