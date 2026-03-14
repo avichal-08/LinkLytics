@@ -25,6 +25,9 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Linklytics",
   description: "Get complete analytics for your links",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({
