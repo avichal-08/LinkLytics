@@ -35,7 +35,12 @@ export async function deleteLinkAction(linkId: string) {
             eq(links.id, linkId)
         );
 
-        await redis.del(linkToDelete.slug);
+        try {
+            await redis.del(`slug:${linkToDelete.slug}`);
+            await redis.del(linkToDelete.slug);
+        } catch (cacheErr: any) {
+            console.warn("[Redis Cache Delete Warning]:", cacheErr?.message || cacheErr);
+        }
 
         revalidatePath("/dashboard");
         return { success: true };

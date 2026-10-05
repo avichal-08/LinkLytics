@@ -12,14 +12,38 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const formatChartData = (data: Record<string, number> | undefined) => {
+export type ChartDataItem = {
+    name: string;
+    clicks?: number | string;
+    value?: number | string;
+};
+
+const formatChartData = (
+    data: Record<string, number> | ChartDataItem[] | undefined
+) => {
     if (!data) return [];
+    if (Array.isArray(data)) {
+        return data
+            .map((item) => ({
+                name: item.name || "Unknown",
+                value: Number(item.clicks ?? item.value ?? 0),
+            }))
+            .filter((item) => item.value > 0)
+            .sort((a, b) => b.value - a.value);
+    }
     return Object.entries(data)
-        .map(([name, value]) => ({ name, value }))
+        .map(([name, value]) => ({ name: name || "Unknown", value: Number(value) }))
+        .filter((item) => item.value > 0)
         .sort((a, b) => b.value - a.value); 
 };
 
-export function ChartCard({ title, data }: { title: string, data: Record<string, number> }) {
+export function ChartCard({ 
+    title, 
+    data 
+}: { 
+    title: string; 
+    data: Record<string, number> | ChartDataItem[];
+}) {
     const { resolvedTheme } = useTheme();
     const chartData = formatChartData(data);
 
@@ -61,7 +85,7 @@ export function ChartCard({ title, data }: { title: string, data: Record<string,
                                     }}
                                 />
                                 <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={24}>
-                                    {chartData.map((entry, index) => (
+                                    {chartData.map((_, index) => (
                                         <Cell key={`cell-${index}`} fill={barColor} />
                                     ))}
                                 </Bar>

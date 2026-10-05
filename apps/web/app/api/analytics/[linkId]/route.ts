@@ -1,10 +1,8 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../lib/configs/authOptions";
+import { authOptions } from "@/lib/configs/authOptions";
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@repo/db";
-import { links, linkAnalytics } from "@repo/db";
-import { eq, and, desc } from "drizzle-orm";
-import { getCount } from "@/lib/utils/getCount";
+import { db, links, linkAnalytics } from "@repo/db";
+import { eq, and, desc, sql, count, countDistinct } from "drizzle-orm";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ linkId: string }> }) {
     try {
@@ -12,8 +10,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ link
         if (!session || !session.user?.id) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
+
         const { linkId } = await params;
-        const userId = session?.user.id;
 
         const link = await db.query.links.findFirst({
             where: and(
@@ -26,23 +24,40 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ link
             return new NextResponse("Link not found", { status: 404 });
         }
 
-        const analyticsData = await db
-            .select()
+        const buildStatQuery = (column: any) =>
+            db.select({
+                name: sql<string>`COALESCE(${column}, 'Unknown')`,
+                clicks: count()
+            })
             .from(linkAnalytics)
             .where(eq(linkAnalytics.linkId, linkId))
-            .orderBy(desc(linkAnalytics.timestamp));
+            .groupBy(column)
+            .orderBy(desc(count()))
+            .limit(10);
 
-        const totalClicks = analyticsData.length;
-        const uniqueVisitors = new Set(analyticsData.map(a => a.visitorHash)).size;
+        const [
+            [totals],
+            devices,
+            os,
+            browsers,
+            countries,
+            cities,
+            referrers
+        ] = await Promise.all([
+            db.select({
+                totalClicks: count(),
+                uniqueVisitors: countDistinct(linkAnalytics.visitorHash)
+            })
+            .from(linkAnalytics)
+            .where(eq(linkAnalytics.linkId, linkId)),
 
-        const stats = {
-            countries: getCount(analyticsData, "countryCode"),
-            cities: getCount(analyticsData, "city"),
-            devices: getCount(analyticsData, "deviceType"),
-            os: getCount(analyticsData, "os"),
-            browsers: getCount(analyticsData, "browser"),
-            referrers: getCount(analyticsData, "referrer"),
-        };
+            buildStatQuery(linkAnalytics.deviceType),
+            buildStatQuery(linkAnalytics.os),
+            buildStatQuery(linkAnalytics.browser),
+            buildStatQuery(linkAnalytics.countryCode),
+            buildStatQuery(linkAnalytics.city),
+            buildStatQuery(linkAnalytics.referrer)
+        ]);
 
         return NextResponse.json({
             meta: {
@@ -51,11 +66,17 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ link
                 createdAt: link.createdAt
             },
             summary: {
-                totalClicks,
-                uniqueVisitors
+                totalClicks: totals?.totalClicks || 0,
+                uniqueVisitors: totals?.uniqueVisitors || 0
             },
-            analytics: stats,
-            allClicks: analyticsData
+            analytics: {
+                devices,
+                os,
+                browsers,
+                countries,
+                cities,
+                referrers
+            }
         });
 
     } catch (error) {
