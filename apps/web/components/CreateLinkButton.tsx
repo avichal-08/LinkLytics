@@ -1,18 +1,16 @@
 import Link from "next/link";
+import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
-import { Pencil } from "lucide-react";
 
-export function CreateLinkButton() {
-
+export function CreateLinkButton({ className = "" }: { className?: string }) {
     return (
-        <div className="flex mb-8">
-
-            <Link href="/create">
-                <Button variant="outline" className="gap-2 px-6 py-6 text-base rounded-xl cursor-pointer hover:border-primary hover:text-primary transition-colors">
-                    <Pencil className="h-4 w-4 hover:border-primary hover:text-primary" />
-                    Create New
-                </Button>
-            </Link>
-        </div>
+        <Link href="/create" className={className}>
+            <Button
+                className="bg-neutral-900 text-white hover:bg-neutral-800 shadow-xs hover:shadow-sm font-medium text-sm h-9 px-3.5 rounded-lg flex items-center gap-1.5 transition-all active:scale-[0.98] cursor-pointer"
+            >
+                <Plus className="h-4 w-4 stroke-[2.5]" />
+                <span>Create link</span>
+            </Button>
+        </Link>
     );
 }

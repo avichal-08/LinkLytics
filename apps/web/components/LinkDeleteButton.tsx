@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,56 +17,64 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-
 interface LinkDetail {
-    id: string,
-    slug: string
+    id: string;
+    slug: string;
 }
 
 export function LinkDeleteButton({ link }: { link: LinkDetail }) {
-
     const router = useRouter();
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = async () => {
-        await deleteLinkAction(link.id.toString());
-        router.push(`/dashboard`)
+        setIsDeleting(true);
+        try {
+            await deleteLinkAction(link.id.toString());
+            router.push(`/dashboard`);
+        } catch (err) {
+            console.error("Failed to delete link:", err);
+            setIsDeleting(false);
+        }
     };
 
     return (
         <div onClick={(e) => e.stopPropagation()}>
             <AlertDialog>
-                <AlertDialogTrigger>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-opacity"
-                        aria-label="Delete link"
-                    >
-                        <Trash2 className="h-4 w-4" />
-                    </Button>
+                <AlertDialogTrigger
+                    render={
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 px-2.5 text-xs font-medium text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200/80 rounded-lg gap-1.5 transition-colors cursor-pointer"
+                            aria-label="Delete link"
+                        />
+                    }
+                >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span>Delete</span>
                 </AlertDialogTrigger>
 
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogTitle>Delete shortened link?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete the link
-                            <strong> https://linklytics-two.vercel.app/{link.slug}</strong> and remove all associated analytics data.
+                            This will permanently delete <strong>/{link.slug}</strong> and remove all associated analytics. This action cannot be undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel className="cursor-pointer">
+                        <AlertDialogCancel disabled={isDeleting} className="cursor-pointer">
                             Cancel
                         </AlertDialogCancel>
                         <AlertDialogAction
                             onClick={handleDelete}
-                            className="bg-red-500 hover:bg-red-600 text-white cursor-pointer"
+                            disabled={isDeleting}
+                            className="bg-red-600 hover:bg-red-700 text-white cursor-pointer"
                         >
-                            Delete Link
+                            {isDeleting ? "Deleting..." : "Delete link"}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
         </div>
-    )
+    );
 }

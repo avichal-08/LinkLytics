@@ -1,6 +1,5 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import { 
     AreaChart, 
     Area, 
@@ -13,9 +12,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ClicksTimeChart({ data }: { data: { date: string; clicks: number }[] }) {
-    const { resolvedTheme } = useTheme();
-    const strokeColor = resolvedTheme === "dark" ? "#3b82f6" : "#2563eb"; 
-    const fillColor = resolvedTheme === "dark" ? "rgba(59, 130, 246, 0.2)" : "rgba(37, 99, 235, 0.2)";
+    const strokeColor = "#2563eb"; 
 
     return (
         <Card className="border-border shadow-sm bg-card text-card-foreground mb-6">
@@ -39,27 +36,27 @@ export function ClicksTimeChart({ data }: { data: { date: string; clicks: number
                                         <stop offset="95%" stopColor={strokeColor} stopOpacity={0}/>
                                     </linearGradient>
                                 </defs>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={resolvedTheme === 'dark' ? '#374151' : '#e5e7eb'} />
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
                                 <XAxis 
                                     dataKey="date" 
                                     axisLine={false} 
                                     tickLine={false} 
-                                    tick={{ fill: resolvedTheme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: 12 }}
+                                    tick={{ fill: '#6b7280', fontSize: 12 }}
                                     dy={10}
                                 />
                                 <YAxis 
                                     axisLine={false} 
                                     tickLine={false} 
-                                    tick={{ fill: resolvedTheme === 'dark' ? '#9ca3af' : '#6b7280', fontSize: 12 }}
+                                    tick={{ fill: '#6b7280', fontSize: 12 }}
                                     allowDecimals={false}
                                 />
                                 <Tooltip 
-                                    cursor={{ stroke: resolvedTheme === 'dark' ? '#4b5563' : '#d1d5db', strokeWidth: 1, strokeDasharray: '3 3' }}
+                                    cursor={{ stroke: '#d1d5db', strokeWidth: 1, strokeDasharray: '3 3' }}
                                     contentStyle={{ 
                                         borderRadius: '8px', 
-                                        border: `1px solid ${resolvedTheme === 'dark' ? '#374151' : '#e5e7eb'}`, 
-                                        backgroundColor: resolvedTheme === 'dark' ? '#030712' : '#ffffff',
-                                        color: resolvedTheme === 'dark' ? '#f9fafb' : '#030712'
+                                        border: '1px solid #e5e7eb', 
+                                        backgroundColor: '#ffffff',
+                                        color: '#030712'
                                     }}
                                 />
                                 <Area 

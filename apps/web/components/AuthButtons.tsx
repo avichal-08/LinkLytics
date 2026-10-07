@@ -17,10 +17,9 @@ export function AuthButtons() {
     localStorage.setItem("lastUsedProvider", provider);
     signIn(provider, { callbackUrl: "/dashboard" });
   };
-
   return (
     <div className="flex flex-col sm:flex-row gap-5 w-full justify-center items-center">
-      
+
       <div className="relative flex w-full sm:w-auto justify-center">
         {mounted && lastUsed === "google" && (
           <span className="absolute -top-3 px-2 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold uppercase tracking-wider rounded-full z-10 backdrop-blur-sm">

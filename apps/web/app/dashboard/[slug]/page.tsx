@@ -12,6 +12,7 @@ import {
 
 import { db, linkAnalytics, links } from "@repo/db";
 
+import { Header } from "@/components/Header";
 import { ChartCard } from "@/components/ChartCard";
 import { ClicksTimeChart } from "@/components/ClicksTimeChart";
 import { CopyButton } from "@/components/CopyButton";
@@ -44,8 +45,18 @@ export default async function LinkAnalyticsPage({
 
   if (!linkData) {
     return (
-      <div className="text-muted-foreground p-8 text-center">
-        Link not found or you do not have permission to view it.
+      <div className="min-h-screen bg-neutral-50/30 flex flex-col">
+        <Header user={session.user} />
+        <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+          <p className="text-muted-foreground text-sm">
+            Link not found or you do not have permission to view it.
+          </p>
+          <Link href="/dashboard" className="mt-4 inline-block">
+            <Button variant="outline" size="sm">
+              Return to dashboard
+            </Button>
+          </Link>
+        </main>
       </div>
     );
   }
@@ -128,75 +139,94 @@ export default async function LinkAnalyticsPage({
   });
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-5xl flex-col space-y-8 p-8">
-      <div>
-        <Button
-          variant="ghost"
-          className="text-muted-foreground hover:text-primary mb-4 -ml-4"
-          asChild
-        >
-          <Link href="/dashboard">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-          </Link>
-        </Button>
+    <div className="min-h-screen bg-neutral-50/30 flex flex-col text-foreground">
+      <Header user={session.user} />
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h1 className="font-display text-primary mb-2 text-2xl font-bold">
-              https://linklytics-two.vercel.app/{linkData.slug}
-            </h1>
-            <CopyButton
-              text={`https://linklytics-two.vercel.app/${linkData.slug}`}
-            />
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Breadcrumb & Navigation */}
+        <div>
+          <div className="flex items-center gap-1.5 text-xs text-neutral-500 mb-3 font-medium">
+            <Link href="/dashboard" className="hover:text-neutral-900 transition-colors">
+              Dashboard
+            </Link>
+            <span className="text-neutral-300">/</span>
+            <Link href="/dashboard" className="hover:text-neutral-900 transition-colors">
+              Links
+            </Link>
+            <span className="text-neutral-300">/</span>
+            <span className="text-neutral-900 font-mono">/{linkData.slug}</span>
           </div>
-          <LinkDeleteButton link={{ id: linkData.id, slug: linkData.slug }} />
-        </div>
-        <a
-          href={linkData.destinationUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-muted-foreground flex items-center gap-1 text-sm transition-colors hover:text-blue-500"
-        >
-          {linkData.destinationUrl} <ExternalLink className="h-3 w-3" />
-        </a>
-      </div>
 
-      <ClicksTimeChart data={last7Days} />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
+            <div>
+              <div className="flex items-center gap-2.5">
+                <h1 className="font-display text-neutral-950 text-2xl font-bold tracking-tight">
+                  /{linkData.slug}
+                </h1>
+                <CopyButton
+                  text={`https://linklytics-two.vercel.app/${linkData.slug}`}
+                />
+              </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Card className="border-border shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Clicks</CardTitle>
-            <MousePointerClick className="text-muted-foreground h-4 w-4" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{totals?.totalClicks || 0}</div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-border shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
-              Unique Visitors
-            </CardTitle>
-            <Users className="text-muted-foreground h-4 w-4" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">
-              {totals?.uniqueVisitors || 0}
+              <a
+                href={linkData.destinationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-500 hover:text-neutral-900 flex items-center gap-1.5 text-xs transition-colors mt-1 max-w-md truncate"
+              >
+                <span>{linkData.destinationUrl}</span>
+                <ExternalLink className="h-3 w-3 shrink-0" />
+              </a>
             </div>
-          </CardContent>
-        </Card>
-      </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <ChartCard title="Devices" data={devices} />
-        <ChartCard title="Operating Systems" data={os} />
-        <ChartCard title="Browsers" data={browsers} />
-        <ChartCard title="Countries" data={countries} />
-        <ChartCard title="Cities" data={cities} />
-        <ChartCard title="Referrers" data={referrers} />
-      </div>
+            <LinkDeleteButton link={{ id: linkData.id, slug: linkData.slug }} />
+          </div>
+        </div>
+
+        {/* 7-Day Chart */}
+        <ClicksTimeChart data={last7Days} />
+
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Card className="border border-border/80 shadow-xs rounded-xl">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-xs uppercase tracking-wider font-medium text-neutral-500">
+                Total Clicks
+              </CardTitle>
+              <MousePointerClick className="text-neutral-400 h-4 w-4" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold tracking-tight text-neutral-950">
+                {totals?.totalClicks || 0}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border border-border/80 shadow-xs rounded-xl">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-xs uppercase tracking-wider font-medium text-neutral-500">
+                Unique Visitors
+              </CardTitle>
+              <Users className="text-neutral-400 h-4 w-4" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold tracking-tight text-neutral-950">
+                {totals?.uniqueVisitors || 0}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Detailed Breakdown Charts */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <ChartCard title="Devices" data={devices} />
+          <ChartCard title="Operating Systems" data={os} />
+          <ChartCard title="Browsers" data={browsers} />
+          <ChartCard title="Countries" data={countries} />
+          <ChartCard title="Cities" data={cities} />
+          <ChartCard title="Referrers" data={referrers} />
+        </div>
+      </main>
     </div>
   );
 }

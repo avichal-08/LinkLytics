@@ -47,7 +47,7 @@ export default async function Home() {
       <main className="flex-1 flex flex-col items-center">
 
         <section className="w-full px-6 py-24 md:py-32 flex flex-col items-center text-center max-w-5xl mx-auto relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-blue-500/10 dark:bg-blue-500/20 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
 
           <div className="inline-flex items-center rounded-full border border-border bg-muted/50 px-3 py-1 text-sm text-muted-foreground mb-8">
             <span className="flex h-2 w-2 rounded-full bg-primary mr-2 animate-pulse"></span>
@@ -56,7 +56,7 @@ export default async function Home() {
 
           <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tight mb-6 leading-tight">
             Shorten links. <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-400 dark:to-indigo-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600">
               Measure everything.
             </span>
           </h1>
@@ -110,7 +110,7 @@ export default async function Home() {
       </main>
 
       <footer className="w-full border-t border-border/40 py-8 text-center text-sm text-muted-foreground">
-        <p>© {new Date().getFullYear()} LinkLytics. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} LinkLytics. All rights reserved.</p>
       </footer>
     </div>
   );

@@ -1,6 +1,5 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import { 
     BarChart, 
     Bar, 
@@ -44,10 +43,9 @@ export function ChartCard({
     title: string; 
     data: Record<string, number> | ChartDataItem[];
 }) {
-    const { resolvedTheme } = useTheme();
     const chartData = formatChartData(data);
 
-    const barColor = resolvedTheme === "dark" ? "#3b82f6" : "#2563eb";
+    const barColor = "#2563eb";
 
     return (
         <Card className="border-border shadow-sm bg-card text-card-foreground">
@@ -73,15 +71,15 @@ export function ChartCard({
                                     tickLine={false} 
                                     fontSize={12}
                                     width={90}
-                                    tick={{ fill: resolvedTheme === 'dark' ? '#9ca3af' : '#6b7280' }}
+                                    tick={{ fill: '#6b7280' }}
                                 />
                                 <Tooltip 
-                                    cursor={{ fill: resolvedTheme === 'dark' ? '#1f2937' : '#f3f4f6' }}
+                                    cursor={{ fill: '#f3f4f6' }}
                                     contentStyle={{ 
                                         borderRadius: '8px', 
-                                        border: `1px solid ${resolvedTheme === 'dark' ? '#374151' : '#e5e7eb'}`, 
-                                        backgroundColor: resolvedTheme === 'dark' ? '#030712' : '#ffffff',
-                                        color: resolvedTheme === 'dark' ? '#f9fafb' : '#030712'
+                                        border: '1px solid #e5e7eb', 
+                                        backgroundColor: '#ffffff',
+                                        color: '#030712'
                                     }}
                                 />
                                 <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={24}>

@@ -2,14 +2,23 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Link as LinkIcon, AlertCircle, CheckCircle2, Copy, Check } from "lucide-react";
+import { 
+    ArrowLeft, 
+    Link2, 
+    AlertCircle, 
+    CheckCircle2, 
+    Copy, 
+    Check, 
+    ExternalLink,
+    BarChart2,
+    Sparkles
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-
-import { createLink } from "@/lib/client/createLink"; 
+import { createLink } from "@/lib/client/createLink";
 
 export default function CreateLink() {
     const urlRef = useRef<HTMLInputElement>(null);
@@ -50,79 +59,136 @@ export default function CreateLink() {
         }
     };
 
+    const slug = redirectUrl ? redirectUrl.split("/").pop() : "";
+
     return (
-        <div className="max-w-2xl mx-auto p-8 flex flex-col min-h-screen">
-            <div className="mb-8">
-                <Button variant="ghost" className="-ml-4 text-muted-foreground hover:text-primary">
-                    <Link href="/dashboard">
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                    </Link>
-                </Button>
+        <div className="max-w-xl mx-auto px-4 py-8 sm:py-12 flex flex-col min-h-screen">
+            {/* Small Breadcrumb Back */}
+            <div className="mb-6">
+                <Link 
+                    href="/dashboard"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-500 hover:text-neutral-900 transition-colors"
+                >
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    <span>Back to links</span>
+                </Link>
             </div>
 
-            <Card className="border-border shadow-sm">
-                <CardHeader>
-                    <CardTitle className="text-2xl font-display flex items-center gap-2">
-                        <LinkIcon className="h-5 w-5 text-primary" />
-                        Create New Link
-                    </CardTitle>
-                    <CardDescription>
-                        Paste a long URL below to generate a trackable, short link.
+            <Card className="border border-border/80 shadow-xs bg-card rounded-2xl overflow-hidden">
+                <CardHeader className="pb-4 border-b border-border/60">
+                    <div className="flex items-center gap-2.5 mb-1">
+                        <div className="h-7 w-7 rounded-lg bg-neutral-900 text-white flex items-center justify-center shadow-xs">
+                            <Link2 className="h-3.5 w-3.5 stroke-[2.5]" />
+                        </div>
+                        <CardTitle className="text-lg font-semibold tracking-tight text-neutral-900 font-display">
+                            Create a short link
+                        </CardTitle>
+                    </div>
+                    <CardDescription className="text-xs text-neutral-500">
+                        Paste your destination URL below to generate an optimized short link with analytics.
                     </CardDescription>
                 </CardHeader>
                 
                 <form onSubmit={handleSubmit}>
-                    <CardContent className="space-y-6">
-                        
+                    <CardContent className="space-y-5 pt-6">
                         {error && (
-                            <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-md flex items-center gap-2 text-red-600 dark:text-red-400 text-sm">
-                                <AlertCircle className="h-4 w-4 shrink-0" />
-                                {error}
+                            <div className="p-3 bg-red-50 border border-red-200/80 rounded-xl flex items-center gap-2.5 text-red-700 text-xs">
+                                <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
+                                <span>{error}</span>
                             </div>
                         )}
 
                         {redirectUrl && (
-                            <div className="p-4 bg-green-500/10 border border-green-500/50 rounded-lg flex items-center justify-between">
-                                <div className="flex items-center gap-2 text-green-700 dark:text-green-400 overflow-hidden">
-                                    <CheckCircle2 className="h-5 w-5 shrink-0" />
-                                    <span className="font-mono text-sm truncate">{redirectUrl}</span>
+                            <div className="p-4 bg-emerald-50/70 border border-emerald-200/80 rounded-xl space-y-3">
+                                <div className="flex items-center justify-between gap-2">
+                                    <div className="flex items-center gap-2 text-emerald-800 overflow-hidden">
+                                        <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+                                        <span className="font-semibold text-xs uppercase tracking-wider text-emerald-700">Link created successfully</span>
+                                    </div>
+                                    <Button 
+                                        type="button"
+                                        variant="outline" 
+                                        size="sm" 
+                                        className="h-7 px-2.5 text-xs text-emerald-800 bg-white border-emerald-300 hover:bg-emerald-50 rounded-lg gap-1.5 cursor-pointer shadow-2xs"
+                                        onClick={copyToClipboard}
+                                    >
+                                        {copied ? (
+                                            <>
+                                                <Check className="h-3.5 w-3.5 text-emerald-600" />
+                                                <span>Copied</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Copy className="h-3.5 w-3.5 text-emerald-600" />
+                                                <span>Copy</span>
+                                            </>
+                                        )}
+                                    </Button>
                                 </div>
-                                <Button 
-                                    type="button"
-                                    variant="ghost" 
-                                    size="icon" 
-                                    className="shrink-0 text-green-700 hover:bg-green-500/20 dark:text-green-400"
-                                    onClick={copyToClipboard}
-                                >
-                                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4 cursor-pointer" />}
-                                </Button>
+
+                                <div className="p-2.5 bg-white/90 border border-emerald-200/60 rounded-lg font-mono text-xs text-neutral-900 truncate">
+                                    {redirectUrl}
+                                </div>
+
+                                {slug && (
+                                    <div className="flex items-center gap-3 pt-1 text-xs">
+                                        <Link
+                                            href={`/dashboard/${slug}`}
+                                            className="text-neutral-600 hover:text-neutral-900 flex items-center gap-1 font-medium transition-colors"
+                                        >
+                                            <BarChart2 className="h-3.5 w-3.5" />
+                                            <span>View analytics</span>
+                                        </Link>
+                                        <a
+                                            href={redirectUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-neutral-600 hover:text-neutral-900 flex items-center gap-1 font-medium transition-colors"
+                                        >
+                                            <ExternalLink className="h-3.5 w-3.5" />
+                                            <span>Test redirect</span>
+                                        </a>
+                                    </div>
+                                )}
                             </div>
                         )}
 
-                        <div className="space-y-2">
-                            <Label htmlFor="url">Destination URL <span className="text-red-500">*</span></Label>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="url" className="text-xs font-medium text-neutral-700">
+                                Destination URL <span className="text-red-500">*</span>
+                            </Label>
                             <Input 
                                 id="url" 
                                 type="url" 
                                 ref={urlRef}
-                                placeholder="https://example.com/my-super-long-url..." 
+                                placeholder="https://example.com/my-long-landing-page..." 
                                 required
-                                className="bg-background"
+                                className="h-10 text-sm bg-white border-border/80 focus-visible:ring-1 focus-visible:ring-neutral-900 focus-visible:border-neutral-900 rounded-lg shadow-2xs"
                             />
+                            <p className="text-[11px] text-neutral-400">
+                                Enter the full destination including https://
+                            </p>
                         </div>
-                        
                     </CardContent>
                     
-                    <CardFooter className="flex justify-end gap-4 border-t border-border pt-6 mt-2">
+                    <CardFooter className="flex items-center justify-end gap-2.5 border-t border-border/60 p-4 bg-neutral-50/50">
+                        <Link href="/dashboard">
+                            <Button 
+                                variant="outline" 
+                                type="button" 
+                                disabled={isLoading}
+                                className="h-9 px-3.5 text-xs font-medium text-neutral-700 bg-white border-border/80 hover:bg-neutral-50 rounded-lg shadow-2xs cursor-pointer"
+                            >
+                                Cancel
+                            </Button>
+                        </Link>
                         <Button 
-                            variant="outline" 
-                            type="button" 
-                            disabled={isLoading}
+                            type="submit" 
+                            disabled={isLoading} 
+                            className="h-9 px-4 text-xs font-medium bg-neutral-900 text-white hover:bg-neutral-800 rounded-lg shadow-xs cursor-pointer flex items-center gap-1.5"
                         >
-                            <Link href="/dashboard">Cancel</Link>
-                        </Button>
-                        <Button type="submit" disabled={isLoading} className="cursor-pointer">
-                            {isLoading ? "Generating..." : "Get Redirect URL"}
+                            <Sparkles className="h-3.5 w-3.5" />
+                            <span>{isLoading ? "Generating..." : "Create link"}</span>
                         </Button>
                     </CardFooter>
                 </form>
