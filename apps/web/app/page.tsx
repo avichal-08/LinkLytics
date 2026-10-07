@@ -1,117 +1,170 @@
-import { redirect } from "next/navigation";
+import Link from "next/link";
 import { getServerSession } from "next-auth";
-import { BarChart3, Globe, Link as LinkIcon, Zap, Github } from "lucide-react";
+import { ArrowRight, Sparkles, Shield, Zap, BarChart2 } from "lucide-react";
 
-import { AuthButtons } from "@/components/AuthButtons";
 import { authOptions } from "@/lib/configs/authOptions";
-import { Button } from "@/components/ui/button";
+import { AuthButtons } from "@/components/AuthButtons";
+import { LandingNav } from "@/components/LandingNav";
+import { HeroDashboardPreview } from "@/components/HeroDashboardPreview";
+import { FeaturesSection } from "@/components/FeaturesSection";
+import { AnalyticsPreview } from "@/components/AnalyticsPreview";
+import { LandingFooter } from "@/components/LandingFooter";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-
-  if (session) {
-    redirect("/dashboard");
-  }
+  const isAuthenticated = Boolean(session?.user);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen flex flex-col bg-white text-neutral-900 selection:bg-neutral-900 selection:text-white">
+      {/* 1. Navbar */}
+      <LandingNav isAuthenticated={isAuthenticated} userName={session?.user?.name} />
 
-      <header className="px-6 lg:px-14 h-20 flex items-center justify-between border-b border-border/40 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center gap-2">
-          <div className="bg-primary/10 p-2 rounded-xl">
-            <LinkIcon className="h-5 w-5 text-primary" />
-          </div>
-          <span className="text-2xl font-display font-bold tracking-tight text-primary">
-            LinkLytics
-          </span>
-        </div>
-        <nav className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" className="h-12 w-12 text-muted-foreground hover:text-primary">
-            <a href="https://github.com/avichal-08" target="_blank" rel="noopener noreferrer">
-              <Github className="h-5 w-5" />
-              <span className="sr-only">GitHub</span>
-            </a>
-          </Button>
-
-          <Button variant="ghost" size="icon" className="h-12 w-12 text-muted-foreground hover:text-primary">
-            <a href="https://x.com/Avichal_08" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" className="h-7 w-7" fill="currentColor" aria-hidden="true">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 24.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-              <span className="sr-only">X</span>
-            </a>
-          </Button>
-        </nav>
-      </header>
-
-      <main className="flex-1 flex flex-col items-center">
-
-        <section className="w-full px-6 py-24 md:py-32 flex flex-col items-center text-center max-w-5xl mx-auto relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
-
-          <div className="inline-flex items-center rounded-full border border-border bg-muted/50 px-3 py-1 text-sm text-muted-foreground mb-8">
-            <span className="flex h-2 w-2 rounded-full bg-primary mr-2 animate-pulse"></span>
-            Now with real-time analytics
+      <main className="flex-1 flex flex-col items-center overflow-x-hidden">
+        {/* 2. Hero Section */}
+        <section className="w-full px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 md:pt-24 pb-12 sm:pb-16 flex flex-col items-center text-center max-w-5xl mx-auto">
+          {/* Announcement Pill */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-neutral-200/90 bg-neutral-50 px-3.5 py-1 text-xs font-medium text-neutral-700 mb-6 sm:mb-8 shadow-2xs transition-all hover:bg-neutral-100/80">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Real-time link analytics</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tight mb-6 leading-tight">
-            Shorten links. <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600">
+          {/* Headline */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold font-display tracking-tight text-neutral-950 leading-[1.08] mb-6 max-w-4xl">
+            Shorten links. <br className="hidden sm:inline" />
+            <span className="text-neutral-950 bg-gradient-to-r from-neutral-950 via-neutral-800 to-neutral-600 bg-clip-text text-transparent">
               Measure everything.
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-10 leading-relaxed">
-            Create custom, trackable short links in seconds. Get deep insights into your audience with beautiful charts for devices, locations, and referrers.
+          {/* Supporting Copy */}
+          <p className="text-base sm:text-lg md:text-xl text-neutral-600 max-w-2xl mb-8 sm:mb-10 leading-relaxed font-normal">
+            Create short, trackable links and understand exactly how your audience interacts with them in real time.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
-            <div className="scale-110">
-              <AuthButtons />
+          {/* CTA Row */}
+          <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center gap-3">
+            {isAuthenticated ? (
+              <Link 
+                href="/dashboard" 
+                className="inline-flex items-center justify-center h-12 px-8 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white font-medium shadow-xs hover:shadow-sm text-sm gap-2 transition-all active:scale-[0.98] w-full sm:w-auto cursor-pointer"
+              >
+                <span>Go to dashboard</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            ) : (
+              <div className="w-full flex flex-col items-center gap-3">
+                <AuthButtons />
+                <p className="text-xs text-neutral-400 mt-2">
+                  No credit card required. Free &amp; open source.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* 3. Hero Product Visual Mockup */}
+          <div id="product" className="w-full">
+            <HeroDashboardPreview />
+          </div>
+        </section>
+
+        {/* 4. Trust / Positioning Statement */}
+        <section className="w-full px-4 sm:px-6 lg:px-8 py-12 sm:py-16 border-y border-neutral-200/80 bg-neutral-50/50">
+          <div className="max-w-5xl mx-auto text-center space-y-6">
+            <p className="text-xs font-semibold tracking-wider uppercase text-neutral-400">
+              Reliable Foundation
+            </p>
+            <h3 className="text-2xl sm:text-3xl font-bold font-display text-neutral-950 tracking-tight">
+              Everything you need to understand your links.
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 max-w-3xl mx-auto">
+              <div className="flex flex-col items-center text-center p-3">
+                <div className="h-8 w-8 rounded-lg bg-white border border-neutral-200/80 flex items-center justify-center text-neutral-800 mb-2 shadow-2xs">
+                  <Zap className="h-4 w-4" />
+                </div>
+                <h4 className="text-sm font-semibold text-neutral-900">Sub-millisecond redirects</h4>
+                <p className="text-xs text-neutral-500 mt-0.5">Powered by in-memory Redis edge cache</p>
+              </div>
+
+              <div className="flex flex-col items-center text-center p-3">
+                <div className="h-8 w-8 rounded-lg bg-white border border-neutral-200/80 flex items-center justify-center text-neutral-800 mb-2 shadow-2xs">
+                  <BarChart2 className="h-4 w-4" />
+                </div>
+                <h4 className="text-sm font-semibold text-neutral-900">Real-time event stream</h4>
+                <p className="text-xs text-neutral-500 mt-0.5">Asynchronously buffered through Kafka</p>
+              </div>
+
+              <div className="flex flex-col items-center text-center p-3">
+                <div className="h-8 w-8 rounded-lg bg-white border border-neutral-200/80 flex items-center justify-center text-neutral-800 mb-2 shadow-2xs">
+                  <Shield className="h-4 w-4" />
+                </div>
+                <h4 className="text-sm font-semibold text-neutral-900">Privacy-centric analytics</h4>
+                <p className="text-xs text-neutral-500 mt-0.5">No invasive tracking cookies used</p>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="w-full px-6 py-24 bg-muted/30 border-t border-border/40">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Everything you need to track your traffic</h2>
-              <p className="text-muted-foreground">Built for speed, reliability, and deep insights.</p>
-            </div>
+        {/* 5. Features Section */}
+        <section id="features" className="w-full px-4 sm:px-6 lg:px-8 py-20 sm:py-28 max-w-6xl mx-auto">
+          <FeaturesSection />
+        </section>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="flex flex-col items-center text-center p-6 rounded-2xl border border-border bg-card shadow-sm transition-all hover:shadow-md hover:border-primary/50">
-                <div className="h-12 w-12 bg-blue-500/10 text-blue-500 rounded-xl flex items-center justify-center mb-6">
-                  <Zap className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">Lightning Fast</h3>
-                <p className="text-muted-foreground">Redirects powered by Upstash Redis cache ensuring your users never wait to reach their destination.</p>
+        {/* 6. Analytics Visualization Section */}
+        <section id="analytics" className="w-full px-4 sm:px-6 lg:px-8 py-20 sm:py-28 bg-neutral-50/40 border-y border-neutral-200/80">
+          <div className="max-w-6xl mx-auto">
+            <AnalyticsPreview />
+          </div>
+        </section>
+
+        {/* 8. Final CTA Section */}
+        <section className="w-full px-4 sm:px-6 lg:px-8 py-20 sm:py-24 max-w-5xl mx-auto">
+          <div className="rounded-3xl border border-neutral-200/90 bg-neutral-950 text-white p-8 sm:p-14 text-center space-y-6 relative overflow-hidden shadow-xl">
+            <div
+              className="absolute -right-20 -top-20 w-80 h-80 bg-blue-500/20 blur-3xl rounded-full pointer-events-none"
+              aria-hidden="true"
+            />
+            <div
+              className="absolute -left-20 -bottom-20 w-80 h-80 bg-purple-500/15 blur-3xl rounded-full pointer-events-none"
+              aria-hidden="true"
+            />
+
+            <div className="relative z-10 max-w-2xl mx-auto space-y-4">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-medium text-neutral-300">
+                <Sparkles className="h-3 w-3 text-neutral-300" />
+                <span>Start for free</span>
               </div>
 
-              <div className="flex flex-col items-center text-center p-6 rounded-2xl border border-border bg-card shadow-sm transition-all hover:shadow-md hover:border-primary/50">
-                <div className="h-12 w-12 bg-indigo-500/10 text-indigo-500 rounded-xl flex items-center justify-center mb-6">
-                  <BarChart3 className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">Beautiful Analytics</h3>
-                <p className="text-muted-foreground">Visualize your traffic with interactive Recharts. Track clicks over time, OS, and browsers instantly.</p>
-              </div>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight text-white">
+                Ready to shorten smarter?
+              </h2>
 
-              <div className="flex flex-col items-center text-center p-6 rounded-2xl border border-border bg-card shadow-sm transition-all hover:shadow-md hover:border-primary/50">
-                <div className="h-12 w-12 bg-purple-500/10 text-purple-500 rounded-xl flex items-center justify-center mb-6">
-                  <Globe className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">Global Audience</h3>
-                <p className="text-muted-foreground">Know exactly where your clicks are coming from with detailed country and city-level tracking.</p>
+              <p className="text-neutral-400 text-sm sm:text-base leading-relaxed">
+                Create your first link in seconds and start understanding every click with real-time insights.
+              </p>
+
+              <div className="pt-2">
+                {isAuthenticated ? (
+                  <Link 
+                    href="/dashboard" 
+                    className="inline-flex items-center justify-center h-11 px-8 rounded-xl bg-white hover:bg-neutral-100 text-neutral-950 font-semibold shadow-xs text-sm gap-2 transition-all active:scale-[0.98] cursor-pointer"
+                  >
+                    <span>Go to dashboard</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                ) : (
+                  <div className="flex justify-center">
+                    <AuthButtons />
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </section>
-
       </main>
 
-      <footer className="w-full border-t border-border/40 py-8 text-center text-sm text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} LinkLytics. All rights reserved.</p>
-      </footer>
+      {/* 9. Minimal Footer */}
+      <LandingFooter />
     </div>
   );
 }

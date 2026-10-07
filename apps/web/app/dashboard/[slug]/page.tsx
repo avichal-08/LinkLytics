@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 
 import { and, count, countDistinct, desc, eq, gte, sql } from "drizzle-orm";
 import {
-  ArrowLeft,
   ExternalLink,
   MousePointerClick,
   Users,
@@ -17,8 +16,6 @@ import { ChartCard } from "@/components/ChartCard";
 import { ClicksTimeChart } from "@/components/ClicksTimeChart";
 import { CopyButton } from "@/components/CopyButton";
 import { LinkDeleteButton } from "@/components/LinkDeleteButton";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { authOptions } from "@/lib/configs/authOptions";
 
 export default async function LinkAnalyticsPage({
@@ -51,10 +48,11 @@ export default async function LinkAnalyticsPage({
           <p className="text-muted-foreground text-sm">
             Link not found or you do not have permission to view it.
           </p>
-          <Link href="/dashboard" className="mt-4 inline-block">
-            <Button variant="outline" size="sm">
-              Return to dashboard
-            </Button>
+          <Link 
+            href="/dashboard" 
+            className="mt-4 inline-flex items-center justify-center h-8 px-3 text-xs font-medium border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors"
+          >
+            Return to dashboard
           </Link>
         </main>
       </div>
@@ -139,7 +137,7 @@ export default async function LinkAnalyticsPage({
   });
 
   return (
-    <div className="min-h-screen bg-neutral-50/30 flex flex-col text-foreground">
+    <div className="min-h-screen bg-neutral-50/40 flex flex-col text-neutral-900">
       <Header user={session.user} />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -160,7 +158,7 @@ export default async function LinkAnalyticsPage({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
             <div>
               <div className="flex items-center gap-2.5">
-                <h1 className="font-display text-neutral-950 text-2xl font-bold tracking-tight">
+                <h1 className="font-display text-[#181818] text-2xl font-bold tracking-tight">
                   /{linkData.slug}
                 </h1>
                 <CopyButton
@@ -183,48 +181,71 @@ export default async function LinkAnalyticsPage({
           </div>
         </div>
 
-        {/* 7-Day Chart */}
+        {/* 7-Day Monochrome Trend Chart */}
         <ClicksTimeChart data={last7Days} />
 
-        {/* KPI Cards */}
+        {/* High-level KPI Cards */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Card className="border border-border/80 shadow-xs rounded-xl">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs uppercase tracking-wider font-medium text-neutral-500">
+          <div className="bg-white border border-[#E5E5E5] rounded-[20px] p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+            <div className="flex items-center justify-between pb-2">
+              <span className="text-xs uppercase tracking-wider font-medium text-[#999999]">
                 Total Clicks
-              </CardTitle>
-              <MousePointerClick className="text-neutral-400 h-4 w-4" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold tracking-tight text-neutral-950">
-                {totals?.totalClicks || 0}
-              </div>
-            </CardContent>
-          </Card>
+              </span>
+              <MousePointerClick className="text-[#888888] h-4 w-4" />
+            </div>
+            <div className="text-3xl font-bold tracking-tight text-[#181818]">
+              {(totals?.totalClicks || 0).toLocaleString()}
+            </div>
+          </div>
 
-          <Card className="border border-border/80 shadow-xs rounded-xl">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs uppercase tracking-wider font-medium text-neutral-500">
+          <div className="bg-white border border-[#E5E5E5] rounded-[20px] p-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+            <div className="flex items-center justify-between pb-2">
+              <span className="text-xs uppercase tracking-wider font-medium text-[#999999]">
                 Unique Visitors
-              </CardTitle>
-              <Users className="text-neutral-400 h-4 w-4" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold tracking-tight text-neutral-950">
-                {totals?.uniqueVisitors || 0}
-              </div>
-            </CardContent>
-          </Card>
+              </span>
+              <Users className="text-[#888888] h-4 w-4" />
+            </div>
+            <div className="text-3xl font-bold tracking-tight text-[#181818]">
+              {(totals?.uniqueVisitors || 0).toLocaleString()}
+            </div>
+          </div>
         </div>
 
-        {/* Detailed Breakdown Charts */}
+        {/* Detailed Breakdown Distribution Cards (3-Column Grid) */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <ChartCard title="Devices" data={devices} />
-          <ChartCard title="Operating Systems" data={os} />
-          <ChartCard title="Browsers" data={browsers} />
-          <ChartCard title="Countries" data={countries} />
-          <ChartCard title="Cities" data={cities} />
-          <ChartCard title="Referrers" data={referrers} />
+          {/* Row 1: Primary requested categories */}
+          <ChartCard 
+            title="Countries" 
+            category="Share" 
+            data={countries} 
+          />
+          <ChartCard 
+            title="Devices" 
+            category="Type" 
+            data={devices} 
+          />
+          <ChartCard 
+            title="Referrers" 
+            category="Source" 
+            data={referrers} 
+          />
+
+          {/* Row 2: Complementary detailed metrics */}
+          <ChartCard 
+            title="Operating Systems" 
+            category="System" 
+            data={os} 
+          />
+          <ChartCard 
+            title="Browsers" 
+            category="Browser" 
+            data={browsers} 
+          />
+          <ChartCard 
+            title="Cities" 
+            category="City" 
+            data={cities} 
+          />
         </div>
       </main>
     </div>

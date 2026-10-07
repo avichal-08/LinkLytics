@@ -172,15 +172,11 @@ export default function CreateLink() {
                     </CardContent>
                     
                     <CardFooter className="flex items-center justify-end gap-2.5 border-t border-border/60 p-4 bg-neutral-50/50">
-                        <Link href="/dashboard">
-                            <Button 
-                                variant="outline" 
-                                type="button" 
-                                disabled={isLoading}
-                                className="h-9 px-3.5 text-xs font-medium text-neutral-700 bg-white border-border/80 hover:bg-neutral-50 rounded-lg shadow-2xs cursor-pointer"
-                            >
-                                Cancel
-                            </Button>
+                        <Link 
+                            href="/dashboard"
+                            className="inline-flex items-center justify-center h-9 px-3.5 text-xs font-medium text-neutral-700 bg-white border border-border/80 hover:bg-neutral-50 rounded-lg shadow-2xs cursor-pointer transition-colors"
+                        >
+                            Cancel
                         </Link>
                         <Button 
                             type="submit" 

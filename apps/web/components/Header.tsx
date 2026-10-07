@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Link2, HelpCircle } from "lucide-react";
 import { UserProfile } from "./UserProfile";
-import { Button } from "./ui/button";
 
 interface HeaderProps {
     user: {
@@ -28,28 +27,6 @@ export function Header({ user }: HeaderProps) {
                             LinkLytics
                         </span>
                     </Link>
-
-                    {/* Nav Links */}
-                    <nav className="hidden md:flex items-center gap-1 text-sm">
-                        <Link
-                            href="/dashboard"
-                            className="px-3 py-1.5 rounded-md font-medium text-foreground bg-muted/80 transition-colors"
-                        >
-                            Links
-                        </Link>
-                        <Link
-                            href="/dashboard"
-                            className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors"
-                        >
-                            Analytics
-                        </Link>
-                        <Link
-                            href="/dashboard"
-                            className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors"
-                        >
-                            Settings
-                        </Link>
-                    </nav>
                 </div>
 
                 {/* Right Actions */}
@@ -58,16 +35,10 @@ export function Header({ user }: HeaderProps) {
                         href="https://github.com/avichal-08"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hidden sm:inline-flex"
+                        className="hidden sm:inline-flex h-8 w-8 items-center justify-center text-muted-foreground hover:text-foreground hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer"
+                        aria-label="Help and resources"
                     >
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-muted-foreground hover:text-foreground rounded-lg"
-                            aria-label="Help and resources"
-                        >
-                            <HelpCircle className="h-4 w-4" />
-                        </Button>
+                        <HelpCircle className="h-4 w-4" />
                     </a>
 
                     <UserProfile user={user} />

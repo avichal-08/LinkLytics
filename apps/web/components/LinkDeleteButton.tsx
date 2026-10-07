@@ -14,7 +14,6 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 interface LinkDetail {
@@ -25,6 +24,7 @@ interface LinkDetail {
 export function LinkDeleteButton({ link }: { link: LinkDetail }) {
     const router = useRouter();
     const [isDeleting, setIsDeleting] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleDelete = async () => {
         setIsDeleting(true);
@@ -39,21 +39,18 @@ export function LinkDeleteButton({ link }: { link: LinkDetail }) {
 
     return (
         <div onClick={(e) => e.stopPropagation()}>
-            <AlertDialog>
-                <AlertDialogTrigger
-                    render={
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 px-2.5 text-xs font-medium text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200/80 rounded-lg gap-1.5 transition-colors cursor-pointer"
-                            aria-label="Delete link"
-                        />
-                    }
-                >
-                    <Trash2 className="h-3.5 w-3.5" />
-                    <span>Delete</span>
-                </AlertDialogTrigger>
+            <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsOpen(true)}
+                className="h-8 px-2.5 text-xs font-medium text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200/80 rounded-lg gap-1.5 transition-colors cursor-pointer"
+                aria-label="Delete link"
+            >
+                <Trash2 className="h-3.5 w-3.5" />
+                <span>Delete</span>
+            </Button>
 
+            <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Delete shortened link?</AlertDialogTitle>
