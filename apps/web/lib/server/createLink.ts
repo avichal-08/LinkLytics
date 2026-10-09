@@ -32,7 +32,7 @@ export default async function createLink(url: string, userId: string) {
             console.warn("[Redis Cache Error in createLink]:", cacheErr?.message || cacheErr);
         }
 
-        return `https://linklytics-two.vercel.app/${redirectSlug}`;
+        return `http://localhost:3001/${redirectSlug}`;
     } catch (error) {
         console.error("createLink failed:", error);
         return false;

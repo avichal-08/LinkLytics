@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { 
-    Copy, 
-    Check, 
-    ExternalLink, 
-    MoreHorizontal, 
-    BarChart2, 
-    Trash2, 
+import {
+    Copy,
+    Check,
+    ExternalLink,
+    MoreHorizontal,
+    BarChart2,
+    Trash2,
     Calendar,
     Globe,
     Link2
@@ -51,8 +51,8 @@ export function LinkCard({ link }: { link: LinkItem }) {
     const domain = (() => {
         try {
             const url = new URL(
-                link.destinationUrl.startsWith("http") 
-                    ? link.destinationUrl 
+                link.destinationUrl.startsWith("http")
+                    ? link.destinationUrl
                     : `https://${link.destinationUrl}`
             );
             return url.hostname.replace(/^www\./, "");
@@ -63,7 +63,7 @@ export function LinkCard({ link }: { link: LinkItem }) {
 
     const shortUrl = typeof window !== "undefined"
         ? `${window.location.origin}/${link.slug}`
-        : `https://linklytics-two.vercel.app/${link.slug}`;
+        : `http://localhost:3001/${link.slug}`;
 
     const handleCopy = (e: React.MouseEvent, urlToCopy = shortUrl) => {
         e.stopPropagation();
@@ -147,7 +147,7 @@ export function LinkCard({ link }: { link: LinkItem }) {
                         <span>{clickCount.toLocaleString()} {clickCount === 1 ? "click" : "clicks"}</span>
                     </div>
 
-                    <div 
+                    <div
                         className="hidden md:inline-flex items-center gap-1.5 text-neutral-500"
                         suppressHydrationWarning
                     >
@@ -157,7 +157,7 @@ export function LinkCard({ link }: { link: LinkItem }) {
                 </div>
 
                 {/* Right: Actions */}
-                <div 
+                <div
                     className="flex items-center justify-end gap-1 shrink-0 pl-12 sm:pl-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-border/40"
                     onClick={(e) => e.stopPropagation()}
                 >

@@ -48,8 +48,8 @@ export default async function LinkAnalyticsPage({
           <p className="text-muted-foreground text-sm">
             Link not found or you do not have permission to view it.
           </p>
-          <Link 
-            href="/dashboard" 
+          <Link
+            href="/dashboard"
             className="mt-4 inline-flex items-center justify-center h-8 px-3 text-xs font-medium border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors"
           >
             Return to dashboard
@@ -162,7 +162,7 @@ export default async function LinkAnalyticsPage({
                   /{linkData.slug}
                 </h1>
                 <CopyButton
-                  text={`https://linklytics-two.vercel.app/${linkData.slug}`}
+                  text={`http://localhost:3001/${linkData.slug}`}
                 />
               </div>
 
@@ -214,37 +214,37 @@ export default async function LinkAnalyticsPage({
         {/* Detailed Breakdown Distribution Cards (3-Column Grid) */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {/* Row 1: Primary requested categories */}
-          <ChartCard 
-            title="Countries" 
-            category="Share" 
-            data={countries} 
+          <ChartCard
+            title="Countries"
+            category="Share"
+            data={countries}
           />
-          <ChartCard 
-            title="Devices" 
-            category="Type" 
-            data={devices} 
+          <ChartCard
+            title="Devices"
+            category="Type"
+            data={devices}
           />
-          <ChartCard 
-            title="Referrers" 
-            category="Source" 
-            data={referrers} 
+          <ChartCard
+            title="Referrers"
+            category="Source"
+            data={referrers}
           />
 
           {/* Row 2: Complementary detailed metrics */}
-          <ChartCard 
-            title="Operating Systems" 
-            category="System" 
-            data={os} 
+          <ChartCard
+            title="Operating Systems"
+            category="System"
+            data={os}
           />
-          <ChartCard 
-            title="Browsers" 
-            category="Browser" 
-            data={browsers} 
+          <ChartCard
+            title="Browsers"
+            category="Browser"
+            data={browsers}
           />
-          <ChartCard 
-            title="Cities" 
-            category="City" 
-            data={cities} 
+          <ChartCard
+            title="Cities"
+            category="City"
+            data={cities}
           />
         </div>
       </main>
