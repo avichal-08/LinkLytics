@@ -1,0 +1,12 @@
+**/node_modules
+**/.next
+**/.turbo
+**/.env
+**/.env.*
+.git
+.github
+.husky
+*.md
+redirect.k6.js
+Dockerfile
+docker-compose.yml

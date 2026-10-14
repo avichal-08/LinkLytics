@@ -3,6 +3,11 @@ services:
     image: redis:alpine
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   kafka:
     image: apache/kafka:3.7.0
@@ -11,11 +16,63 @@ services:
     environment:
       - KAFKA_NODE_ID=1
       - KAFKA_PROCESS_ROLES=broker,controller
-      - KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_LISTENERS=INTERNAL://:29092,EXTERNAL://:9092,CONTROLLER://:9093
+      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
       - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       - KAFKA_CONTROLLER_QUORUM_VOTERS=1@localhost:9093
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
       - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
       - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 > /dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 15s
+
+  web:
+    build:
+      context: .
+      target: web
+    env_file: apps/web/.env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - REDIS_TCP_URL=redis://redis:6379
+    ports:
+      - "3000:3000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redirect:
+    build:
+      context: .
+      target: redirect
+    env_file: apps/redirect/.env
+    environment:
+      - PORT=3001
+      - REDIS_URL=redis://redis:6379
+      - KAFKA_BROKERS=kafka:29092
+    ports:
+      - "3001:3001"
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  consumer:
+    build:
+      context: .
+      target: consumer
+    env_file: apps/consumer/.env
+    environment:
+      - KAFKA_BROKERS=kafka:29092
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped

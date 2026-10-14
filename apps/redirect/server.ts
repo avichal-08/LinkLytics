@@ -53,7 +53,7 @@ app.get('/:slug', async (req, res) => {
     if (hit) {
       //negative caching check: if we previously cached a 404
       if (hit === 'NOT_FOUND') {
-        return res.redirect(307, '/not-found');
+        return res.status(404).send('Short link not found');
       }
 
       try {
